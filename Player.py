@@ -5,6 +5,8 @@ class Player:
     def __init__(self, player_deck):
         self.player_deck = player_deck
         self.points = 0
+        self.bid = True
+        self.limit = 100
 
     def play_card(self, index):
         return self.player_deck.throw_a_card(index)
@@ -48,6 +50,18 @@ class Player:
                 print("You can't declare marriage with this card!")
         else:
             print("You can't declare this marriage! You don't have queen and king heart!")
+
+    def accept_central_deck(self, central_deck):
+        self.player_deck.accept_central_deck(central_deck)
+
+    def accept_card(self, card):
+        self.player_deck.accept_card(card)
+
+    def note_limitation_bidding(self):
+        self.limit = 120
+
+    def find_best_card(self, cards_used):
+        return 0
 
     def __str__(self):
         return self.player_deck.__str__()
