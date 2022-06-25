@@ -1,6 +1,6 @@
 import random
 
-from Card import Card
+from Card import Card, card, card_value
 
 
 class PlayerDeck:
@@ -12,6 +12,12 @@ class PlayerDeck:
 
     def throw_a_card(self, index):
         return self.cards.pop(index)
+
+    def accept_card(self, c):
+        self.cards.append(c)
+
+    def accept_central_deck(self, central_deck):
+        self.cards += central_deck
 
     def has_spade_marriage(self):
         return Card.QUEEN * 4 + Card.SPADE in self.cards \
