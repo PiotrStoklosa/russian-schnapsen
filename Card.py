@@ -1,3 +1,11 @@
+def card(rank, suit):
+    return rank * 4 + suit
+
+
+def card_value(c):
+    return card(c.rank, c.suit)
+
+
 class Card:
     card_rank = ["9", "J", "Q", "K", "10", "A"]
     NINE = 0
@@ -51,4 +59,3 @@ class CardValue:
     CLUB_MARRIAGE = 60
     DIAMOND_MARRIAGE = 80
     HEART_MARRIAGE = 100
-
