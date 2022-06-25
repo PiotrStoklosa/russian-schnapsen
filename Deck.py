@@ -20,20 +20,20 @@ class PlayerDeck:
         self.cards += central_deck
 
     def has_spade_marriage(self):
-        return Card.QUEEN * 4 + Card.SPADE in self.cards \
-               and Card.KING + Card.SPADE in self.cards
+        return Card.QUEEN * 4 + Card.SPADE in map(card_value, self.cards) \
+               and Card.KING + Card.SPADE in map(card_value, self.cards)
 
     def has_club_marriage(self):
-        return Card.QUEEN * 4 + Card.CLUB in self.cards \
-               and Card.KING + Card.CLUB in self.cards
+        return card(Card.QUEEN, Card.CLUB) in map(card_value, self.cards) \
+               and card(Card.KING, Card.CLUB) in map(card_value, self.cards)
 
     def has_diamond_marriage(self):
-        return Card.QUEEN * 4 + Card.DIAMOND in self.cards \
-               and Card.KING + Card.DIAMOND in self.cards
+        return card(Card.QUEEN, Card.DIAMOND) in map(card_value, self.cards) \
+               and card(Card.KING, Card.DIAMOND) in map(card_value, self.cards)
 
     def has_heart_marriage(self):
-        return Card.QUEEN * 4 + Card.HEART in self.cards \
-               and Card.KING + Card.HEART in self.cards
+        return card(Card.QUEEN, Card.HEART) in map(card_value, self.cards) \
+               and card(Card.KING, Card.HEART) in map(card_value, self.cards)
 
     def has_marriage(self):
         return self.has_spade_marriage() \
