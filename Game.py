@@ -1,3 +1,4 @@
+from Card import CardValue
 from Deck import WholeDeck
 from Player import Player
 
@@ -99,7 +100,12 @@ class Game:
         else:
             self.limit = self.players[self.player].limit
         print("Player " + str(self.turn + 1) + " will try to get " + str(self.limit) + " points!")
-
+        if self.limit > 100:
+            print("Central deck is: ")
+            for c in self.central_deck.cards:
+                print(c, end=' ')
+        self.players[self.player].accept_central_deck(self.central_deck)
+        self.players[self.player].spare_card(self.players[(self.player + 1) % 3], self.players[(self.player + 2) % 3])
         cards_used = []
 
         while self.players[0].player_deck.cards:
@@ -145,3 +151,17 @@ class Game:
                     print(
                         "Player " + str(self.turn + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
                 self.turn = (self.turn + 1) % 3
+            won_card = self.indicate_winner(cards_threw[0], cards_threw[1],
+                                            cards_threw[2])
+            print("Player " + str((won_card + self.turn) % 3 + 1) + " won")
+            self.players[(won_card + self.turn) % 3].points += CardValue.card_values[cards_threw[0].rank] + \
+                                                               CardValue.card_values[
+                                                                   cards_threw[1].rank] + CardValue.card_values[
+                                                                   cards_threw[2].rank]
+            self.player = (won_card + self.turn) % 3
+            self.turn = self.player
+            cards_used += cards_threw
+        print("Score:")
+        print("Player1: " + str(self.players[0].points))
+        print("Player2: " + str(self.players[1].points))
+        print("Player3: " + str(self.players[2].points))

@@ -54,6 +54,10 @@ class Player:
     def accept_central_deck(self, central_deck):
         self.player_deck.accept_central_deck(central_deck)
 
+    def spare_card(self, player1, player2):
+        player1.accept_card(self.play_card(0))
+        player2.accept_card(self.play_card(0))
+
     def accept_card(self, card):
         self.player_deck.accept_card(card)
 
