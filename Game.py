@@ -88,7 +88,16 @@ class Game:
                 self.turn = (self.turn + 1) % 3
         self.player = self.turn
         print("Player " + str(self.player + 1) + " won the bidding phase with value: " + str(self.limit))
+        if self.limit > 100:
+            print("Central deck is: ")
+            for c in self.central_deck.cards:
+                print(c, end=' ')
+            print()
+        self.players[self.player].accept_central_deck(self.central_deck)
+        self.players[self.player].spare_card(self.players[(self.player + 1) % 3], self.players[(self.player + 2) % 3])
+        cards_used = []
         if self.player == 0:
+            print("Your cards: " + self.players[0].__str__())
             print(
                 "Do you want to raise limit?"
                 " - value greater than 0 if yes (value you want to play, for instance 210)"
@@ -100,14 +109,6 @@ class Game:
         else:
             self.limit = self.players[self.player].limit
         print("Player " + str(self.turn + 1) + " will try to get " + str(self.limit) + " points!")
-        if self.limit > 100:
-            print("Central deck is: ")
-            for c in self.central_deck.cards:
-                print(c, end=' ')
-        self.players[self.player].accept_central_deck(self.central_deck)
-        self.players[self.player].spare_card(self.players[(self.player + 1) % 3], self.players[(self.player + 2) % 3])
-        cards_used = []
-
         while self.players[0].player_deck.cards:
             cards_threw = []
             print("\n\n\n")
