@@ -17,7 +17,7 @@ class PlayerDeck:
         self.cards.append(c)
 
     def accept_central_deck(self, central_deck):
-        self.cards += central_deck
+        self.cards += central_deck.cards
 
     def has_spade_marriage(self):
         return Card.QUEEN * 4 + Card.SPADE in map(card_value, self.cards) \
@@ -74,6 +74,6 @@ class WholeDeck:
     def generate_players_decks(self):
         deck1 = PlayerDeck(self.cards[:7])
         deck2 = PlayerDeck(self.cards[7:14])
-        deck3 = PlayerDeck(self.cards[14:22])
-        central_deck = PlayerDeck(self.cards[22:])
+        deck3 = PlayerDeck(self.cards[14:21])
+        central_deck = PlayerDeck(self.cards[21:])
         return deck1, deck2, deck3, central_deck
