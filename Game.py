@@ -2,6 +2,16 @@ from Deck import WholeDeck
 from Player import Player
 
 
+def indicate_winner_without_atu(card1, card2, card3):
+    if card1.stronger_without_atu(card2):
+        if card1.stronger_without_atu(card3):
+            return 0
+        return 2
+    if card2.stronger_without_atu(card3):
+        return 1
+    return 2
+
+
 class Game:
     def __init__(self):
         self.central_deck = None
@@ -12,6 +22,31 @@ class Game:
         self.player = 0
         print("Starting game...")
 
+    def indicate_winner(self, card1, card2, card3):
+        if self.atu_color is None:
+            return indicate_winner_without_atu(card1, card2, card3)
+        if card1.suit == self.atu_color:
+            if card2.suit == self.atu_color:
+                if card3.suit == self.atu_color:
+                    indicate_winner_without_atu(card1, card2, card3)
+                if card1.stronger_without_atu(card2):
+                    return 0
+                return 1
+            if card3.suit == self.atu_color:
+                if card1.stronger_without_atu(card3):
+                    return 0
+                return 2
+            return 0
+        if card2.suit == self.atu_color:
+            if card3.suit == self.atu_color:
+                if card2.stronger_without_atu(card3):
+                    return 1
+                return 2
+            return 1
+        if card3.suit == self.atu_color:
+            return 2
+        return indicate_winner_without_atu(card1, card2, card3)
+
     def deal(self):
         deck = WholeDeck()
         deck.shuffle()
@@ -19,6 +54,9 @@ class Game:
         self.players.append(Player(decks[0]))
         self.players.append(Player(decks[1]))
         self.players.append(Player(decks[2]))
+        print("DECKS:")
+        for i in self.players:
+            print(i.__str__())
         self.central_deck = decks[3]
         print("Your cards: " + self.players[0].__str__())
         for player in self.players:
@@ -80,7 +118,7 @@ class Game:
                     "Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
             else:
                 cards_threw.append(self.players[self.player].play_card(
-                    self.players[self.player].find_best_card(cards_used, cards_threw)))
+                    self.players[self.player].find_best_card(cards_used, cards_threw, self.atu_color, True)))
                 print("Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
             self.turn = (self.turn + 1) % 3
             for i in range(2):
@@ -103,7 +141,7 @@ class Game:
                 else:
                     cards_threw.append(
                         self.players[self.turn].play_card(
-                            self.players[self.turn].find_best_card(cards_used, cards_threw)))
+                            self.players[self.turn].find_best_card(cards_used, cards_threw, self.atu_color, False)))
                     print(
                         "Player " + str(self.turn + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
                 self.turn = (self.turn + 1) % 3

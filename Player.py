@@ -92,8 +92,13 @@ class Player:
     def note_limitation_bidding(self):
         self.limit = 120
 
-    def find_best_card(self, cards_used, cards_threw):
-        return 0
+    def find_best_card(self, cards_used, cards_threw, atu, is_player):
+        if is_player:
+            return 0
+        possible_cards = self.cards_to_play(cards_threw, atu)
+        for i in range(len(self.player_deck.cards)):
+            if possible_cards[0] == self.player_deck.cards[i]:
+                return i
 
     def __str__(self):
         return self.player_deck.__str__()
