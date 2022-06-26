@@ -34,6 +34,15 @@ class Card:
     def __gt__(self, obj):
         return self.rank > obj.rank or self.rank == obj.rank and self.suit > obj.suit
 
+    def lower_in_suit(self, obj):
+        return self.same_suit(obj.suit) and self.rank < obj.rank
+
+    def same_suit(self, suit):
+        return self.suit == suit
+
+    def stronger_without_atu(self, obj):
+        return obj.lower_in_suit(self) or not self.same_suit(obj.suit)
+
     def __le__(self, obj):
         return self.rank < obj.rank or self.rank == obj.rank and self.suit <= obj.suit
 

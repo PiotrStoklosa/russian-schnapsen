@@ -57,10 +57,42 @@ class Player:
     def accept_card(self, card):
         self.player_deck.accept_card(card)
 
+    def cards_to_play_according_to_best_card(self, card, atu):
+        filtered = list(filter(lambda x: card.lower_in_suit(x), self.player_deck.cards))
+        if filtered:
+            return filtered
+        filtered = list(filter(lambda x: card.same_suit(x.suit), self.player_deck.cards))
+        if filtered:
+            return filtered
+        if atu is not None:
+            filtered = list(filter(lambda x: card.same_suit(atu), self.player_deck.cards))
+            if filtered:
+                return filtered
+        return self.player_deck.cards
+
+    def cards_to_play(self, cards_threw, atu):
+        if len(cards_threw) == 1:
+            return self.cards_to_play_according_to_best_card(cards_threw[0], atu)
+        else:
+            first_card = cards_threw[0]
+            second_card = cards_threw[1]
+            if atu is None or first_card.suit != atu and second_card.suit != atu:
+                if first_card.stronger_without_atu(second_card):
+                    return self.cards_to_play_according_to_best_card(first_card, atu)
+                return self.cards_to_play_according_to_best_card(second_card, atu)
+            else:
+                if first_card.suit == atu:
+                    if second_card.suit == atu:
+                        if first_card.stronger_without_atu(second_card):
+                            return self.cards_to_play_according_to_best_card(first_card, atu)
+                        return self.cards_to_play_according_to_best_card(second_card, atu)
+                    return self.cards_to_play_according_to_best_card(first_card, atu)
+                return self.cards_to_play_according_to_best_card(second_card, atu)
+
     def note_limitation_bidding(self):
         self.limit = 120
 
-    def find_best_card(self, cards_used):
+    def find_best_card(self, cards_used, cards_threw):
         return 0
 
     def __str__(self):
