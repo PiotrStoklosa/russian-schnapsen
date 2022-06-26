@@ -1,4 +1,4 @@
-from Card import CardValue
+from Card import CardValue, Card
 from Deck import WholeDeck
 from Player import Player
 
@@ -29,7 +29,7 @@ class Game:
         if card1.suit == self.atu_color:
             if card2.suit == self.atu_color:
                 if card3.suit == self.atu_color:
-                    indicate_winner_without_atu(card1, card2, card3)
+                    return indicate_winner_without_atu(card1, card2, card3)
                 if card1.stronger_without_atu(card2):
                     return 0
                 return 1
@@ -126,6 +126,9 @@ class Game:
                 cards_threw.append(self.players[self.player].play_card(
                     self.players[self.player].find_best_card(cards_used, cards_threw, self.atu_color, True)))
                 print("Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
+            if cards_threw[0].rank == Card.QUEEN:
+                if self.players[self.player].declare_potential_marriage(cards_threw[0].suit):
+                    self.atu_color = cards_threw[0].suit
             self.turn = (self.turn + 1) % 3
             for i in range(2):
                 if self.turn == 0:

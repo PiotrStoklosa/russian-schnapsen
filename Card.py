@@ -65,7 +65,7 @@ class CardValue:
     ACE = 11
 
     card_values = [0, 2, 3, 4, 10, 11]
-
+    marriage_values = [40, 60, 80, 100]
     SPADE_MARRIAGE = 40
     CLUB_MARRIAGE = 60
     DIAMOND_MARRIAGE = 80
