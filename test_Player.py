@@ -10,3 +10,8 @@ class TestPlayer(TestCase):
         p = Player(PlayerDeck([Card(Card.NINE, Card.SPADE), Card(Card.KING, Card.SPADE)]))
         cards_to_play = p.cards_to_play([Card(Card.QUEEN, Card.SPADE)], None)
         assert cards_to_play == [Card(Card.KING, Card.SPADE)]
+
+        p = Player(PlayerDeck([Card(Card.NINE, Card.SPADE), Card(Card.KING, Card.CLUB)]))
+        cards_to_play = p.cards_to_play([Card(Card.TEN, Card.DIAMOND)], Card.CLUB)
+        print(cards_to_play)
+        assert cards_to_play == [Card(Card.KING, Card.CLUB)]
