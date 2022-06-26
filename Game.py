@@ -61,8 +61,13 @@ class Game:
         else:
             self.limit = self.players[self.player].limit
         print("Player " + str(self.turn + 1) + " will try to get " + str(self.limit) + " points!")
+
+        cards_used = []
+
         while self.players[0].player_deck.cards:
-            if self.turn == 0:
+            cards_threw = []
+            print("\n\n\n")
+            if self.player == 0:
                 print("Choose a card to play")
                 print(self.players[0].__str__())
                 for i in range(1, len(self.players[0].player_deck.cards) + 1):
@@ -70,4 +75,35 @@ class Game:
                 print()
                 response = input()
                 response = int(response)
-                self.players[0].play_card(response - 1)
+                cards_threw.append(self.players[0].play_card(response - 1))
+                print(
+                    "Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
+            else:
+                cards_threw.append(self.players[self.player].play_card(
+                    self.players[self.player].find_best_card(cards_used, cards_threw)))
+                print("Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
+            self.turn = (self.turn + 1) % 3
+            for i in range(2):
+                if self.turn == 0:
+                    print("Choose a card to play, Your deck")
+                    print(self.players[0].__str__())
+                    for i in range(1, len(self.players[0].player_deck.cards) + 1):
+                        print(i, end='   ')
+                    print()
+                    print("cards, that you can put: ")
+                    cards_to_play = self.players[0].cards_to_play(cards_threw, self.atu_color)
+                    for c in cards_to_play:
+                        print(c, end='')
+                    print()
+                    response = input()
+                    response = int(response)
+                    cards_threw.append(self.players[0].play_card(response - 1))
+                    print(
+                        "Player " + str(self.turn + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
+                else:
+                    cards_threw.append(
+                        self.players[self.turn].play_card(
+                            self.players[self.turn].find_best_card(cards_used, cards_threw)))
+                    print(
+                        "Player " + str(self.turn + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
+                self.turn = (self.turn + 1) % 3
