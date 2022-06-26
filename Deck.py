@@ -41,22 +41,6 @@ class PlayerDeck:
                or self.has_diamond_marriage() \
                or self.has_heart_marriage()
 
-    def is_queen_spade(self, queen_index):
-        return self.cards[queen_index].rank == Card.QUEEN \
-               and self.cards[queen_index].suit == Card.SPADE
-
-    def is_queen_club(self, queen_index):
-        return self.cards[queen_index].rank == Card.QUEEN \
-               and self.cards[queen_index].suit == Card.CLUB
-
-    def is_queen_diamond(self, queen_index):
-        return self.cards[queen_index].rank == Card.QUEEN \
-               and self.cards[queen_index].suit == Card.DIAMOND
-
-    def is_queen_heart(self, queen_index):
-        return self.cards[queen_index].rank == Card.QUEEN \
-               and self.cards[queen_index].suit == Card.HEART
-
 
 class WholeDeck:
     cards = []
