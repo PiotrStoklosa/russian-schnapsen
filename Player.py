@@ -56,7 +56,42 @@ class Player:
                 return self.cards_to_play_according_to_best_card(second_card, atu)
 
     def note_limitation_bidding(self):
-        self.limit = 120
+        l = 0
+        for i in self.player_deck.cards:
+            match i.rank:
+                case Card.ACE:
+                    l += 25
+                case Card.TEN:
+                    l += 20 if Card(Card.ACE, i.suit) in self.player_deck.cards else 5
+                case Card.QUEEN:
+                    match i.suit:
+                        case Card.SPADE:
+                            l += CardValue.SPADE_MARRIAGE if Card(Card.KING, i.suit) in self.player_deck.cards else 7
+                        case Card.CLUB:
+                            l += CardValue.CLUB_MARRIAGE if Card(Card.KING, i.suit) in self.player_deck.cards else 11
+                        case Card.DIAMOND:
+                            l += CardValue.DIAMOND_MARRIAGE if Card(Card.KING, i.suit) in self.player_deck.cards else 15
+                        case Card.HEART:
+                            l += CardValue.HEART_MARRIAGE if Card(Card.KING, i.suit) in self.player_deck.cards else 19
+                case Card.KING:
+                    match i.suit:
+                        case Card.SPADE:
+                            l += 8
+                        case Card.CLUB:
+                            l += 12
+                        case Card.DIAMOND:
+                            l += 16
+                        case Card.HEART:
+                            l += 20
+                case Card.JACK:
+                    l += 10 if Card(Card.ACE, i.suit) in self.player_deck.cards else -5
+
+        # print("With deck: ")
+        # for c in self.player_deck.cards:
+        #     print(c, end=' ')
+        # print()
+        # print("I got " + str(round(l, -1)) + " points!\n\n\n")
+        self.limit = 100 if round(l, -1) < 100 else round(l, -1)
 
     def find_best_card(self, cards_used, cards_threw, atu, is_player):
         if is_player:
