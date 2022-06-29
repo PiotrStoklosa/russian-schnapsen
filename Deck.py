@@ -61,3 +61,23 @@ class WholeDeck:
         deck3 = PlayerDeck(self.cards[14:21])
         central_deck = PlayerDeck(self.cards[21:])
         return deck1, deck2, deck3, central_deck
+
+
+class PartDeck:
+    cards = []
+
+    def throw_a_card(self, index):
+        return self.cards.pop(index)
+
+    def __init__(self, cards_excluded):
+        self.cards = []
+        for i in range(24):
+            c = Card(i // 4, i % 4)
+            if c not in cards_excluded:
+                self.cards.append(Card(i // 4, i % 4))
+
+    def generate_players_random_decks(self):
+        round_count = len(self.cards) // 2
+        deck1 = PlayerDeck(self.cards[:round_count])
+        deck2 = PlayerDeck(self.cards[round_count:])
+        return deck1, deck2
