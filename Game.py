@@ -55,9 +55,9 @@ class Game:
         self.players.append(Player(decks[0]))
         self.players.append(Player(decks[1]))
         self.players.append(Player(decks[2]))
-        print("DECKS:")
-        for i in self.players:
-            print(i.__str__())
+        # print("DECKS:")
+        # for i in self.players:
+        #     print(i.__str__())
         self.central_deck = decks[3]
         print("Your cards: " + self.players[0].__str__())
         for player in self.players:
@@ -166,6 +166,12 @@ class Game:
             self.turn = self.player
             cards_used += cards_threw
         print("Score:")
-        print("Player1: " + str(self.players[0].points))
-        print("Player2: " + str(self.players[1].points))
-        print("Player3: " + str(self.players[2].points))
+        p1 = self.limit if self.limit < self.players[self.player].points else (-1) * self.limit if self.players[0].bid else \
+            self.players[0].points
+        p2 = self.limit if self.limit < self.players[self.player].points else (-1) * self.limit if self.players[1].bid else \
+            self.players[1].points
+        p3 = self.limit if self.limit < self.players[self.player].points else (-1) * self.limit if self.players[2].bid else \
+            self.players[2].points
+        print("Player1: " + str(p1))
+        print("Player2: " + str(p2))
+        print("Player3: " + str(p3))
