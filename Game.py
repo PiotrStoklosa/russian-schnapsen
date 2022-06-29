@@ -13,6 +13,32 @@ def indicate_winner_without_atu(card1, card2, card3):
     return 2
 
 
+def indicate_winner(card1, card2, card3, atu):
+    if atu is None:
+        return indicate_winner_without_atu(card1, card2, card3)
+    if card1.suit == atu:
+        if card2.suit == atu:
+            if card3.suit == atu:
+                return indicate_winner_without_atu(card1, card2, card3)
+            if card1.stronger_without_atu(card2):
+                return 0
+            return 1
+        if card3.suit == atu:
+            if card1.stronger_without_atu(card3):
+                return 0
+            return 2
+        return 0
+    if card2.suit == atu:
+        if card3.suit == atu:
+            if card2.stronger_without_atu(card3):
+                return 1
+            return 2
+        return 1
+    if card3.suit == atu:
+        return 2
+    return indicate_winner_without_atu(card1, card2, card3)
+
+
 class Game:
     def __init__(self):
         self.central_deck = None
@@ -22,31 +48,6 @@ class Game:
         self.turn = 0
         self.player = 0
         print("Starting game...")
-
-    def indicate_winner(self, card1, card2, card3):
-        if self.atu_color is None:
-            return indicate_winner_without_atu(card1, card2, card3)
-        if card1.suit == self.atu_color:
-            if card2.suit == self.atu_color:
-                if card3.suit == self.atu_color:
-                    return indicate_winner_without_atu(card1, card2, card3)
-                if card1.stronger_without_atu(card2):
-                    return 0
-                return 1
-            if card3.suit == self.atu_color:
-                if card1.stronger_without_atu(card3):
-                    return 0
-                return 2
-            return 0
-        if card2.suit == self.atu_color:
-            if card3.suit == self.atu_color:
-                if card2.stronger_without_atu(card3):
-                    return 1
-                return 2
-            return 1
-        if card3.suit == self.atu_color:
-            return 2
-        return indicate_winner_without_atu(card1, card2, card3)
 
     def deal(self):
         deck = WholeDeck()
@@ -120,11 +121,11 @@ class Game:
                 print()
                 response = input()
                 response = int(response)
-                cards_threw.append(self.players[0].play_card(response - 1))
+                cards_threw.append(self.players[0].play_card_from_index(response - 1))
                 print(
                     "Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
             else:
-                cards_threw.append(self.players[self.player].play_card(
+                cards_threw.append(self.players[self.player].play_card_from_index(
                     self.players[self.player].find_best_card(cards_used, cards_threw, self.atu_color, True)))
                 print("Player " + str(self.player + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
             if cards_threw[0].rank == Card.QUEEN:
@@ -145,18 +146,18 @@ class Game:
                     print()
                     response = input()
                     response = int(response)
-                    cards_threw.append(self.players[0].play_card(response - 1))
+                    cards_threw.append(self.players[0].play_card_from_index(response - 1))
                     print(
                         "Player " + str(self.turn + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
                 else:
                     cards_threw.append(
-                        self.players[self.turn].play_card(
+                        self.players[self.turn].play_card_from_index(
                             self.players[self.turn].find_best_card(cards_used, cards_threw, self.atu_color, False)))
                     print(
                         "Player " + str(self.turn + 1) + " played\n" + cards_threw[len(cards_threw) - 1].__str__())
                 self.turn = (self.turn + 1) % 3
-            won_card = self.indicate_winner(cards_threw[0], cards_threw[1],
-                                            cards_threw[2])
+            won_card = indicate_winner(cards_threw[0], cards_threw[1],
+                                       cards_threw[2], self.atu_color)
             print("Player " + str((won_card + self.turn) % 3 + 1) + " won")
             self.players[(won_card + self.turn) % 3].points += CardValue.card_values[cards_threw[0].rank] + \
                                                                CardValue.card_values[
@@ -166,11 +167,14 @@ class Game:
             self.turn = self.player
             cards_used += cards_threw
         print("Score:")
-        p1 = self.limit if self.limit < self.players[self.player].points else (-1) * self.limit if self.players[0].bid else \
+        p1 = (self.limit if self.limit < self.players[self.player].points else (-1) * self.limit) if self.players[
+            0].bid else \
             self.players[0].points
-        p2 = self.limit if self.limit < self.players[self.player].points else (-1) * self.limit if self.players[1].bid else \
+        p2 = (self.limit if self.limit < self.players[self.player].points else (-1) * self.limit) if self.players[
+            1].bid else \
             self.players[1].points
-        p3 = self.limit if self.limit < self.players[self.player].points else (-1) * self.limit if self.players[2].bid else \
+        p3 = (self.limit if self.limit < self.players[self.player].points else (-1) * self.limit) if self.players[
+            2].bid else \
             self.players[2].points
         print("Player1: " + str(p1))
         print("Player2: " + str(p2))
